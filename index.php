@@ -13,15 +13,26 @@ if(isset($_POST['forminscription'])) {
 
         $pseudolength = strlen($pseudo);
         if($pseudolength <= 255) {
-            
-        } else {
-            $erreur = 'Votre pseudo ne doit pas dépasser 255 caracteres';
-        }
+           if($mail == $mail2) {  
+               if(filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+                    if($mdp == $mdp2) {
 
-    } else {
-        $erreur = 'Tout les champs doivent être remplie';
+                } else {
+                    $erreur = "Les mots de passe ne correspondent pas !";
+                }
+            } else {
+                $erreur = "Votre adresse mail n'est pas valide ! ";
+            }
+
+           } else {
+               $erreur = "Les adresse email ne correspondent pas !";
+           }
+        } else {
+            $erreur = "Le nom d'utilisateur ne doit pas dépasser 255 caractéres";
+        }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
