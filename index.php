@@ -5,7 +5,12 @@ $bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', ''); 
 
 if(isset($_POST['forminscription'])) {
     if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
-        $pseudo = htmlspecialchars
+        $pseudo = htmlspecialchars($_POST['pseudo']);
+        $mail = htmlspecialchars($_POST['mail']);
+        $mail2 = htmlspecialchars($_POST['mail2']);
+        $mdp = htmlspecialchars($_POST['mdp']);
+        $mdp2 = htmlspecialchars($_POST['mdp2']);
+
     } else {
         $erreur = 'Tout les champs doivent être remplie';
     }
