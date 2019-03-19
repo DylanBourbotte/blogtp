@@ -1,8 +1,14 @@
 <?php 
-require('config.php');
-$bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', '');
+
+require('config.php'); // Configuration PHP 
+$bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', ''); // Connection a la base de données
+
 if(isset($_POST['forminscription'])) {
-    echo "Ok";
+    if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
+        echo 'Ok';
+    } else {
+        echo 'non';
+    }
 }
 ?>
 
@@ -25,10 +31,10 @@ if(isset($_POST['forminscription'])) {
     <input type="text" placeholder='Votre identifiant' id='pseudo' name='pseudo'>
     
     <label for="mail">Mail:</label>
-    <input type="text" placeholder='Votre adresse email' id='mail' name='mail'>
+    <input type="email" placeholder='Votre adresse email' id='mail' name='mail'>
     
     <label for="mail2">Confirmation du mail:</label>
-    <input type="text" placeholder='Votre adresse email' id='mail2' name='mail2'>
+    <input type="email" placeholder='Votre adresse email' id='mail2' name='mail2'>
     
     <label for="mdp">Mot de passe:</label>
     <input type="password" id='mdp' name='mdp'>
