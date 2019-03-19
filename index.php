@@ -8,8 +8,15 @@ if(isset($_POST['forminscription'])) {
         $pseudo = htmlspecialchars($_POST['pseudo']);
         $mail = htmlspecialchars($_POST['mail']);
         $mail2 = htmlspecialchars($_POST['mail2']);
-        $mdp = htmlspecialchars($_POST['mdp']);
-        $mdp2 = htmlspecialchars($_POST['mdp2']);
+        $mdp = sha1($_POST['mdp']);
+        $mdp2 = sha1($_POST['mdp2']);
+
+        $pseudolength = strlen($pseudo);
+        if($pseudolength <= 255) {
+            
+        } else {
+            $erreur = 'Votre pseudo ne doit pas dépasser 255 caracteres';
+        }
 
     } else {
         $erreur = 'Tout les champs doivent être remplie';
@@ -52,7 +59,7 @@ if(isset($_POST['forminscription'])) {
 <?php 
 
 if(isset($erreur)) {
-    echo $erreur;
+    echo "<font color='red'>".$erreur."</font>";
 }
 
 ?>
