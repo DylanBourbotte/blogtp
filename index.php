@@ -1,22 +1,23 @@
 <?php 
 
 require('config.php'); // Configuration PHP 
-$bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', ''); // Connection a la base de données
 
 if(isset($_POST['forminscription'])) {
+    $pseudo = htmlspecialchars($_POST['pseudo']);
+    $mail = htmlspecialchars($_POST['mail']);
+    $mail2 = htmlspecialchars($_POST['mail2']);
+    $mdp = sha1($_POST['mdp']);
+    $mdp2 = sha1($_POST['mdp2']);
     if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
-        $pseudo = htmlspecialchars($_POST['pseudo']);
-        $mail = htmlspecialchars($_POST['mail']);
-        $mail2 = htmlspecialchars($_POST['mail2']);
-        $mdp = sha1($_POST['mdp']);
-        $mdp2 = sha1($_POST['mdp2']);
 
         $pseudolength = strlen($pseudo);
         if($pseudolength <= 255) {
            if($mail == $mail2) {  
                if(filter_var($mail, FILTER_VALIDATE_EMAIL)) {
                     if($mdp == $mdp2) {
-
+                        $insertmbr = $bdd->prepare("INSERT INTO membres(pseudo, pass, email) VALUES(?, ?, ?)");
+                        $insertmbr->execute(array($pseudo,$mdp, $mail));
+                        $erreur = "Votre compte a bien été créer";
                 } else {
                     $erreur = "Les mots de passe ne correspondent pas !";
                 }
@@ -51,13 +52,13 @@ if(isset($_POST['forminscription'])) {
 <form method='post' action=''>
     
     <label for="pseudo">Identifiant:</label>
-    <input type="text" placeholder='Votre identifiant' id='pseudo' name='pseudo'>
+    <input type="text" placeholder='Votre identifiant' id='pseudo' name='pseudo' value="<?php if(isset($pseudo)) { echo $pseudo;} ?>">
     
     <label for="mail">Mail:</label>
-    <input type="email" placeholder='Votre adresse email' id='mail' name='mail'>
+    <input type="email" placeholder='Votre adresse email' id='mail' name='mail' value="<?php if(isset($mail)) { echo $mail;} ?>">
     
     <label for="mail2">Confirmation du mail:</label>
-    <input type="email" placeholder='Votre adresse email' id='mail2' name='mail2'>
+    <input type="email" placeholder='Votre adresse email' id='mail2' name='mail2' value="<?php if(isset($mail2)) { echo $mail2;} ?>">
     
     <label for="mdp">Mot de passe:</label>
     <input type="password" id='mdp' name='mdp'>
