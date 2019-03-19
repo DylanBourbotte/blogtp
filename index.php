@@ -1,5 +1,6 @@
 <?php 
-require('config.php')
+require('config.php');
+$bdd = new PDO('mysql:host=localhost;dbname=tchat;charset=utf8', 'root', '');
 ?>
 
 <!DOCTYPE html>
@@ -16,16 +17,22 @@ require('config.php')
 <div class='container'>
 <div class='flex'>
 <form method='post' action=''>
+    
     <label for="pseudo">Identifiant:</label>
     <input type="text" placeholder='Votre identifiant' id='pseudo' name='pseudo'>
+    
     <label for="mail">Mail:</label>
     <input type="text" placeholder='Votre adresse email' id='mail' name='mail'>
+    
     <label for="mail2">Confirmation du mail:</label>
     <input type="text" placeholder='Votre adresse email' id='mail2' name='mail2'>
+    
     <label for="mdp">Mot de passe:</label>
     <input type="password" id='mdp' name='mdp'>
+    
     <label for="mdp2">Confirmation du mot de passe:</label>
     <input type="password" id='mdp2' name='mdp2'>
+    <input type='submit' value="S'inscire" class='button'>
 </form>
 </div>
 </div>
