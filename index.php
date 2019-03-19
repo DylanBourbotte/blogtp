@@ -1,6 +1,9 @@
 <?php 
 require('config.php');
 $bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', '');
+if(isset($_POST['forminscription'])) {
+    echo "Ok";
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +35,7 @@ $bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', '');
     
     <label for="mdp2">Confirmation du mot de passe:</label>
     <input type="password" id='mdp2' name='mdp2'>
-    <input type='submit' value="S'inscire" class='button'>
+    <input type='submit' name='forminscription' value="S'inscire" class='button'>
 </form>
 </div>
 </div>
