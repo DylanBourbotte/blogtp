@@ -1,39 +1,35 @@
 <?php 
+session_start();
+$bdd = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', ''); // Connection a la base de données
 
-require('config.php'); // Configuration PHP 
-
-if(isset($_POST['forminscription'])) {
-    $pseudo = htmlspecialchars($_POST['pseudo']);
-    $mail = htmlspecialchars($_POST['mail']);
-    $mail2 = htmlspecialchars($_POST['mail2']);
-    $mdp = sha1($_POST['mdp']);
-    $mdp2 = sha1($_POST['mdp2']);
-    if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
-
-        $pseudolength = strlen($pseudo);
-        if($pseudolength <= 255) {
-           if($mail == $mail2) {  
-               if(filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-                    if($mdp == $mdp2) {
-                        $insertmbr = $bdd->prepare("INSERT INTO membres(pseudo, pass, email) VALUES(?, ?, ?)");
-                        $insertmbr->execute(array($pseudo,$mdp, $mail));
-                        $erreur = "Votre compte a bien été créer";
-                } else {
-                    $erreur = "Les mots de passe ne correspondent pas !";
-                }
-            } else {
-                $erreur = "Votre adresse mail n'est pas valide ! ";
-            }
-
-           } else {
-               $erreur = "Les adresse email ne correspondent pas !";
-           }
-        } else {
-            $erreur = "Le nom d'utilisateur ne doit pas dépasser 255 caractéres";
-        }
+if(isset($_POST['formconnection'])) {
+    
+    $mailconnect = htmlspecialchars($_POST['mailconnect']);
+    
+    $mdpconnect = sha1($_POST['mdpconnect']);
+    
+    if(!empty($mailconnect) && !empty($mdpconnect)) 
+    {
+         $requser = $bdd->prepare("SELECT * FROM membres WHERE email = ? AND pass = ? ");
+         $requser->execute(array($mailconnect, $mdpconnect));
+         $userexist = $requser->rowCount();
+         if($userexist == 1)
+         {
+             $userinfo = $requser->fetch();
+             $_SESSION['id'] = $userinfo['id'];
+             $_SESSION['pseudo'] = $userinfo['pseudo'];
+             $_SESSION['mail'] = $userinfo['mail'];
+             header('Location: profil.php?id='.$_SESSION['id']);
+         }
+         else {
+             $erreur = 'Idenfiant ou mot de passe incorect';
+         }
+    } 
+    else 
+    {
+        $erreur = 'Tout les champs doivent être complétés !';
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +38,7 @@ if(isset($_POST['forminscription'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Inscription</title>
+    <title>Connection</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -50,22 +46,13 @@ if(isset($_POST['forminscription'])) {
 <div class='container'>
 <div class='flex'>
 <form method='post' action=''>
-    
-    <label for="pseudo">Identifiant:</label>
-    <input type="text" placeholder='Votre identifiant' id='pseudo' name='pseudo' value="<?php if(isset($pseudo)) { echo $pseudo;} ?>">
-    
-    <label for="mail">Mail:</label>
-    <input type="email" placeholder='Votre adresse email' id='mail' name='mail' value="<?php if(isset($mail)) { echo $mail;} ?>">
-    
-    <label for="mail2">Confirmation du mail:</label>
-    <input type="email" placeholder='Votre adresse email' id='mail2' name='mail2' value="<?php if(isset($mail2)) { echo $mail2;} ?>">
-    
-    <label for="mdp">Mot de passe:</label>
-    <input type="password" id='mdp' name='mdp'>
-    
-    <label for="mdp2">Confirmation du mot de passe:</label>
-    <input type="password" id='mdp2' name='mdp2'>
-    <input type='submit' name='forminscription' value="S'inscire" class='button'>
+
+<input type="email" name="mailconnect" placeholder="Adresse Email">
+<input type="password" name="mdpconnect" placeholder="Mot de passe">
+<input type="submit" name="formconnection" value="Se connecter">
+<a href="inscription.php">S'inscrire</a>
+
+
 </form>
 
 <?php 
