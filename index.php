@@ -5,9 +5,9 @@ $bdd = new PDO('mysql:host=localhost;dbname=membres;charset=utf8', 'root', ''); 
 
 if(isset($_POST['forminscription'])) {
     if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
-        echo 'Ok';
+        $pseudo = htmlspecialchars
     } else {
-        echo 'non';
+        $erreur = 'Tout les champs doivent être remplie';
     }
 }
 ?>
@@ -43,6 +43,14 @@ if(isset($_POST['forminscription'])) {
     <input type="password" id='mdp2' name='mdp2'>
     <input type='submit' name='forminscription' value="S'inscire" class='button'>
 </form>
+
+<?php 
+
+if(isset($erreur)) {
+    echo $erreur;
+}
+
+?>
 </div>
 </div>
 </body>
