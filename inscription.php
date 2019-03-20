@@ -4,8 +4,8 @@ if(isset($_POST['forminscription'])) {
     $pseudo = htmlspecialchars($_POST['pseudo']);
     $mail = htmlspecialchars($_POST['mail']);
     $mail2 = htmlspecialchars($_POST['mail2']);
-    $mdp = password_hash($_POST['mdp']);
-    $mdp2 = password_hash($_POST['mdp2']);
+    $mdp = $_POST['mdp'];
+    $mdp2 = $_POST['mdp2'];
     if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
 
         $pseudolength = strlen($pseudo);
@@ -17,10 +17,12 @@ if(isset($_POST['forminscription'])) {
                    $mailexist = $reqmail->rowCount();
                    if($mailexist == 0) {
                         
-                    if($mdp == $mdp2) {
+                    if($mdp === $mdp2) {
+                        $mdp = password_hash($mdp,PASSWORD_DEFAULT);
                         $insertmbr = $bdd->prepare("INSERT INTO membres(pseudo, pass, email) VALUES(?, ?, ?)");
                         $insertmbr->execute(array($pseudo,$mdp, $mail));
                         $erreur = "Votre compte a bien été créer <a href=\"index.php\">Se connecter</a>";
+                        header('Location: index.php');
                         
                 } else {
                     $erreur = "Les mots de passe ne correspondent pas !";
@@ -42,7 +44,6 @@ if(isset($_POST['forminscription'])) {
         $erreur = "Tout les champs doivent être remplie";
     }
 }
-
 ?>
 
 <!DOCTYPE html>

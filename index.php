@@ -5,25 +5,38 @@ $bdd = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', ''); // 
 if(isset($_POST['formconnection'])) {
     
     $mailconnect = htmlspecialchars($_POST['mailconnect']);
-    
-    $mdpconnect = sha1($_POST['mdpconnect']);
+    $mdpconnect = htmlspecialchars($_POST['mdpconnect']);
+
     
     if(!empty($mailconnect) && !empty($mdpconnect)) 
     {
-         $requser = $bdd->prepare("SELECT * FROM membres WHERE email = ? AND pass = ? ");
-         $requser->execute(array($mailconnect, $mdpconnect));
-         $userexist = $requser->rowCount();
-         if($userexist == 1)
+         $requser = $bdd->prepare("SELECT * FROM membres WHERE email = ?");
+         $requser->execute(array($mailconnect));
+         $userexist = $requser->fetch();
+         if(password_verify($_POST['mdpconnect'], $userexist['pass'])) 
          {
-             $userinfo = $requser->fetch();
-             $_SESSION['id'] = $userinfo['id'];
-             $_SESSION['pseudo'] = $userinfo['pseudo'];
-             $_SESSION['mail'] = $userinfo['mail'];
-             header('Location: profil.php?id='.$_SESSION['id']);
+            $_SESSION['id'] = $userexist['id'];
+            $_SESSION['pseudo'] = $userexist['pseudo'];
+            $_SESSION['mail'] = $userexist['mail'];
+            header('Location: profil.php?id='.$_SESSION['id']);
          }
-         else {
-             $erreur = 'Idenfiant ou mot de passe incorect';
+         else 
+         {
+             $erreur = 'Les mot de passes ne correspondent pas !';
          }
+        //  var_dump($userexist);
+        //  die;
+        //  if($userexist == 1)
+        //  {
+        //      $userinfo = $requser->fetch();
+        //      $_SESSION['id'] = $userinfo['id'];
+        //      $_SESSION['pseudo'] = $userinfo['pseudo'];
+        //      $_SESSION['mail'] = $userinfo['mail'];
+        //      header('Location: profil.php?id='.$_SESSION['id']);
+        //  }
+        //  else {
+        //      $erreur = 'Idenfiant ou mot de passe incorect';
+        //  }
     } 
     else 
     {
