@@ -4,12 +4,12 @@ if(isset($_POST['forminscription'])) {
     $pseudo = htmlspecialchars($_POST['pseudo']);
     $mail = htmlspecialchars($_POST['mail']);
     $mail2 = htmlspecialchars($_POST['mail2']);
-    $mdp = sha1($_POST['mdp']);
-    $mdp2 = sha1($_POST['mdp2']);
+    $mdp = password_hash($_POST['mdp']);
+    $mdp2 = password_hash($_POST['mdp2']);
     if(!empty($_POST['pseudo']) && !empty($_POST['mail']) && !empty($_POST['mail2']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])) {
 
         $pseudolength = strlen($pseudo);
-        if($pseudolength <= 255) {
+        if($pseudolength <= 255) {  
            if($mail == $mail2) {  
                if(filter_var($mail, FILTER_VALIDATE_EMAIL)) {
                    $reqmail = $bdd->prepare("SELECT * FROM membres WHERE email = ?");
