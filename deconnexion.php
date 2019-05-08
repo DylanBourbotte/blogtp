@@ -4,6 +4,6 @@ session_start();
 $_SESSION = array();
 // On détruit la session actif
 session_destroy();
-header('Location: connection.php')
+header('Location: index.php')
 
 ?>

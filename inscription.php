@@ -35,7 +35,7 @@ if(isset($_POST['forminscription'])) {
                         $insertmbr->execute(array($pseudo,$mdp, $mail));
                         $erreur = "Votre compte a bien été créer <a href=\"index.php\">Se connecter</a>";
                         // On redirige alors vers la page de connection
-                        header('Location: connection.php');
+                        header('Location: index.php');
                         
                 } else {
                     $erreur = "Les mots de passe ne correspondent pas !";
